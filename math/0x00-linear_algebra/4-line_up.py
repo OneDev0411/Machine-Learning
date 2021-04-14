@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """add arrays element wise"""
+
+
 def add_arrays(arr1, arr2):
     if len(arr1) == len(arr2):
         res = [[arr1[i]+arr2[i] for i in range(len(arr1))]]
