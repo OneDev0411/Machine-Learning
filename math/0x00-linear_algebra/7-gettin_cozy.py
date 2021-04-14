@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import numpy as np
+"""concat 2 matrices"""
 
 
 def cat_matrices2D(mat1, mat2, axis=0):
