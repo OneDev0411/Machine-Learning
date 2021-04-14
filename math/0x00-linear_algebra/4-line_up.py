@@ -5,7 +5,7 @@
 def add_arrays(arr1, arr2):
     """add arrays"""
     if len(arr1) == len(arr2):
-        res = [[arr1[i]+arr2[i] for i in range(len(arr1))]]
+        res = [[i + j for i, j in zip(arr1, arr2)]]
         return res
     else:
         return None
