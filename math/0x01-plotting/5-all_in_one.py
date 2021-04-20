@@ -61,7 +61,20 @@ ax4.set_title("Exponential Decay of Radioactive Elements", fontsize='x-small')
 ax4.set_xlim([0, 20000])
 ax4.set_ylim([0, 1])
 
-ax5.hist(student_grades, bins=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100] , edgecolor='black')
+ax5.hist(
+    student_grades,
+    bins=[
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100],
+    edgecolor='black')
 ax5.set_xlim([0, 100])
 ax5.set_ylim([0, 30])
 ax5.set_xticks(np.arange(0, 101, 10))
