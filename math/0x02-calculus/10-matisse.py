@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Calculates the derivate of a polynomial"""
+
+
 def poly_derivative(poly):
     """Calculates the derivate of a poly"""
     if not isinstance(poly, list) or poly == []:
