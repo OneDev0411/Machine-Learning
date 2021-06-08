@@ -25,6 +25,13 @@ class Normal:
                 squared_diff += (data[i] - self.mean) ** 2
             self.stddev = (squared_diff / len(data)) ** 0.5
 
+    @staticmethod
+    def erf(x):
+        """Gauss error function"""
+        pi = 3.1415926536
+        return (2 / (pi ** 0.5)) * (x - (x ** 3 / 3) +
+                                    (x ** 5 / 10) + (x ** 7 / 42) + (x ** 9 / 216))
+
     def z_score(self, x):
         """Calculates the z-score of a given x-value"""
         return (x - self.mean) / self.stddev
@@ -39,3 +46,8 @@ class Normal:
         e = 2.7182818285
         return (1 / (self.stddev * ((2 * pi) ** 0.5))) * \
             (e ** (-0.5 * (((x - self.mean) / self.stddev) ** 2)))
+
+    def cdf(self, x):
+        """Calculates the CDF of a given x-value"""
+        return 0.5 * (1 + self.erf((x - self.mean) /
+                      (self.stddev * (2 ** 0.5))))
