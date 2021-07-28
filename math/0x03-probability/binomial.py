@@ -6,7 +6,7 @@ class Binomial:
     """binomial distribution"""
 
     def __init__(self, data=None, n=1, p=0.5):
-        """n is the number of Bernoulli trial, p is the probability of a success"""
+        """n number of trials, p probability of a success"""
         self.data = data
         if data is None:
             if n <= 0:
@@ -22,5 +22,8 @@ class Binomial:
             elif len(data) <= 2:
                 raise ValueError("data must contain multiple values")
             mean = float(sum(data) / len(data))
-            self.n = round(len(data) / 2)
+            ns = 0
+            for i in data:
+                ns = ns + ((i - mean) ** 2)
+            self.n = round(mean ** 2 / (mean - (ns/len(data))))
             self.p = float(mean / self.n)
