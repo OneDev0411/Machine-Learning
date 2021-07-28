@@ -25,5 +25,22 @@ class Binomial:
             ns = 0
             for i in data:
                 ns = ns + ((i - mean) ** 2)
-            self.n = round(mean ** 2 / (mean - (ns/len(data))))
+            self.n = round(mean ** 2 / (mean - (ns / len(data))))
             self.p = float(mean / self.n)
+
+    @staticmethod
+    def fac(k):
+        """ factorial """
+
+        fac = 1
+        for i in range(2, k + 1):
+            fac = fac * i
+        return fac
+
+    def pmf(self, k):
+        """Calculates the value of the PMF for a given number of successes"""
+        k = int(k)
+        if k < 0:
+            return 0
+        return (self.fac(self.n) / (self.fac(k) * self.fac(self.n - k))
+                ) * (self.p ** k) * ((1 - self.p) ** (self.n - k))
