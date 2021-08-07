@@ -43,16 +43,16 @@ class Neuron:
     def cost(self, Y, A):
         """Calculates the cost of the model using logistic regression
         Y is a numpy.ndarray containing the correct labels for the input data
-        A is a numpy.ndarray containing the activated output of the neuron for each example"""
+        A is a numpy.ndarray containing the activated output"""
         (a, m) = np.shape(Y)
-        cost = -1 / m * np.sum(Y * np.log(A) + (1 - Y)
-                               * (np.log(1.0000001 - A)))
+        cost = -1 / m * np.sum(Y * np.log(A) + (1 - Y) *
+                               (np.log(1.0000001 - A)))
         return cost
 
     def evaluate(self, X, Y):
         """Evaluates the neuron’s predictions
         X is a numpy.ndarray tcontaining the input data
-        Y is a numpy.ndarray containing the correct labels for the input data"""
+        Y is a numpy.ndarray containing the correct labels"""
         pred = self.forward_prop(X)
         predic = np.where(pred >= 0.5, 1, 0)
         return predic, self.cost(Y, pred)
