@@ -9,7 +9,7 @@ class Neuron:
 
     def __init__(self, nx):
         """nx is the number of input features to the neuron"""
-        if type(nx) != int:
+        if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
         elif nx < 1:
             raise ValueError("nx must be a positive integer")
