@@ -30,7 +30,8 @@ class Neuron:
         return self.__A
 
     def forward_prop(self, X):
-        """X: numpy.ndarray with shape (nx, m) that contains the input data"""
+        """Calculates the forward propagation of the neuron
+        X: numpy.ndarray with shape (nx, m) that contains the input data"""
         self.__A = np.dot(self.__W, X) + self.__b
         self.__A = self.sig(self.__A)
         return self.__A
@@ -39,3 +40,19 @@ class Neuron:
     def sig(x):
         """sigmoid function"""
         return 1.0/(1.0 + np.exp(-x))
+
+    def cost(self, Y, A):
+        """Calculates the cost of the model using logistic regression
+        Y is a numpy.ndarray containing the correct labels for the input data
+        A is a numpy.ndarray containing the activated output of the neuron for each example"""
+        (a, m) = np.shape(Y)
+        cost = -1/m * np.sum(Y * np.log(A) + (1.0000001-Y) * (np.log(1.0000001-A)))
+        return cost
+
+    def evaluate(self, X, Y):
+        """Evaluates the neuron’s predictions
+        X is a numpy.ndarray tcontaining the input data
+        Y is a numpy.ndarray containing the correct labels for the input data"""
+        pred = self.forward_prop(X)
+        predic = np.where(pred >= 0.5, 1, 0)
+        return predic, self.cost(Y, pred)
