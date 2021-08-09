@@ -76,4 +76,3 @@ class NeuralNetwork:
         pred1, pred2 = self.forward_prop(X)
         predic2 = np.where(pred2 >= 0.5, 1, 0)
         return predic2, self.cost(Y, pred2)
-
