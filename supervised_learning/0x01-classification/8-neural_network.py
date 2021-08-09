@@ -15,7 +15,7 @@ class NeuralNetwork:
             raise ValueError("nx must be a positive integer")
         if not isinstance(nodes, int):
             raise TypeError("nodes must be an integer")
-        elif nx < 1:
+        elif nodes < 1:
             raise ValueError("nodes must be a positive integer")
         self.W1 = np.random.normal(0.0, 1.0, (nodes, nx))
         self.b1 = np.zeros((nodes, 1))
