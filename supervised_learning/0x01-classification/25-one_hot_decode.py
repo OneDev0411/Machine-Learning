@@ -6,7 +6,7 @@ import numpy as np
 def one_hot_decode(one_hot):
     """that converts a one-hot matrix into a vector of labels"""
     try:
-        inverted = np.argmax(one_hot, axis=0)
+        inverted = np.argmax(one_hot.T, axis=1)
         return inverted
     except Exception:
         return None
