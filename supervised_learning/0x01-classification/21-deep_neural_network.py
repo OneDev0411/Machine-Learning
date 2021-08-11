@@ -96,7 +96,7 @@ class DeepNeuralNetwork:
         for i in range(self.__L, 0, -1):
             self.__weights["W" + str(i)] -= - alpha * \
                 (np.dot(grad, cache["A" + str(i - 1)].T) / m)
-            self.__weights["b" + str(i)] -= - alpha * \
-                np.sum(grad, axis=1, keepdims=True) / m
+            self.__weights["b" + str(i)] += - alpha * \
+                (np.sum(grad, axis=1, keepdims=True) / m)
             grad = np.matmul(self.__weights["W" + str(i)].T, grad) * (
                 cache["A" + str(i - 1)] * (1 - cache["A" + str(i - 1)]))
