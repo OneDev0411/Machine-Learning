@@ -158,7 +158,6 @@ class DeepNeuralNetwork:
         try:
             with (open(filename, "rb")) as file:
                 loaded_object = pickle.load(file)
-                file.close()
             return loaded_object
-        except Exception:
+        except FileNotFoundError:
             return None
