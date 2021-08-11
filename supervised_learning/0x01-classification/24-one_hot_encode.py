@@ -11,7 +11,7 @@ def one_hot_encode(Y, classes):
     if not isinstance(Y, np.ndarray):
         return None
     try:
-        one_hot = np.zeros((classes, Y.max()+1))
+        one_hot = np.zeros((classes, len(Y)))
         one_hot[np.arange(classes), Y] = 1
         return one_hot.T
     except Exception:
