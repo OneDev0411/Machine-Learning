@@ -87,11 +87,6 @@ class DeepNeuralNetwork:
           A is a numpy.ndarray containing the activated output
           alpha is the learning rate"""
         (nx, m) = np.shape(Y)
-        """grad = np.matmul(self.W2.T, A2 - Y) * (A1 * (1 - A1))
-        self.__W2 += - alpha * (np.dot((A2 - Y), A1.T) / m)
-        self.__b2 += - alpha * ((np.sum(A2 - Y, axis=1, keepdims=True)) / m)
-        self.__W1 += - alpha * (np.dot(grad, X.T) / m)
-        self.__b1 += - alpha * ((np.sum(grad, axis=1, keepdims=True)) / m)"""
         grad = cache["A" + str(self.__L)] - Y
         for i in range(self.__L, 0, -1):
             grada = np.matmul(grad, cache["A" + str(i - 1)].T) / m
