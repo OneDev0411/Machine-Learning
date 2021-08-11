@@ -149,8 +149,7 @@ class DeepNeuralNetwork:
         if not (filename.endswith('.pkl')):
             filename += '.pkl'
         with (open(filename, "wb+")) as file:
-            pickle.dump(self, file)
-            file.close()
+            return pickle.dump(self, file)
 
     @staticmethod
     def load(filename):
