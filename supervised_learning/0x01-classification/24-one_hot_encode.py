@@ -12,7 +12,8 @@ def one_hot_encode(Y, classes):
         return None
     try:
         one_hot = np.zeros((classes, len(Y)))
-        one_hot[np.arange(classes), Y] = 1
-        return one_hot.T
+        for i in range(len(Y)):
+            one_hot[Y[i], i] = 1
+        return one_hot
     except Exception:
         return None
