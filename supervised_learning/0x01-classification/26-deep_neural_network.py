@@ -146,8 +146,8 @@ class DeepNeuralNetwork:
         """Saves the instance object to a file in pickle format"""
         if not filename:
             return None
-        if not (filename.endswith('.pkl')):
-            filename += '.pkl'
+        if not (filename.endswith(".pkl")):
+            filename += ".pkl"
         with (open(filename, "wb")) as file:
             return pickle.dump(self, file)
 
