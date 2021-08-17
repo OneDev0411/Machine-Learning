@@ -54,7 +54,7 @@ class DeepNeuralNetwork:
             if i == self.__L - 1:
                 z2 = np.exp(z)
                 self.__cache['A' + str(i + 1)] = z2 / \
-                    np.sum(z2, axis=0, keepdims=True)
+                    np.sum(z2, axis=0)
             else:
                 self.__cache['A' + str(i + 1)] = self.sig(z)
         return self.cache["A" + str(i + 1)], self.__cache
@@ -76,7 +76,7 @@ class DeepNeuralNetwork:
         """Evaluates the neuron’s predictions
         X is a numpy.ndarray tcontaining the input data
         Y is a numpy.ndarray containing the correct labels"""
-        pred1, pred2 = self.forward_prop(X)
+        pred1 = self.forward_prop(X)[0]
         predic2 = np.where(pred1 == np.amax(pred1, axis=0), 1, 0)
         return predic2, self.cost(Y, pred1)
 
@@ -86,7 +86,7 @@ class DeepNeuralNetwork:
           Y is a num py.ndarray containing the correct labels
           A is a numpy.ndarray containing the activated output
           alpha is the learning rate"""
-        (nx, m) = np.shape(Y)
+        m = Y.shape[1]
         grad = cache["A" + str(self.__L)] - Y
         for i in range(self.__L, 0, -1):
             grada = np.matmul(grad, cache["A" + str(i - 1)].T) / m
