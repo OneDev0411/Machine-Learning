@@ -48,7 +48,7 @@ class DeepNeuralNetwork:
         X: numpy.ndarray with shape (nx, m) that contains the input data"""
         self.__cache['A0'] = X
         for i in range(self.__L):
-            z = np.dot(self.__weights["W" + str(i + 1)],
+            z = np.matmul(self.__weights["W" + str(i + 1)],
                        self.__cache["A" + str(i)]) +\
                 self.__weights["b" + str(i + 1)]
             if i == self.__L - 1:
@@ -68,7 +68,7 @@ class DeepNeuralNetwork:
         """Calculates the cost of the model using logistic regression
         Y is a numpy.ndarray containing the correct labels for the input data
         A is a numpy.ndarray containing the activated output"""
-        (a, m) = np.shape(Y)
+        m = Y.shape[1]
         cost = -1 / m * np.sum(Y * np.log(A))
         return cost
 
