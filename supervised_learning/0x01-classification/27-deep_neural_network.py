@@ -51,12 +51,12 @@ class DeepNeuralNetwork:
             z = np.matmul(self.__weights["W" + str(i + 1)],
                           self.__cache["A" + str(i)]) +\
                 self.__weights["b" + str(i + 1)]
-            if i == self.__L - 1:
+            if i != self.__L - 1:
+                self.__cache['A' + str(i + 1)] = self.sig(z)
+            else:
                 z2 = np.exp(z)
                 self.__cache['A' + str(i + 1)] = z2 / \
                     np.sum(z2, axis=0)
-            else:
-                self.__cache['A' + str(i + 1)] = self.sig(z)
         return self.cache["A" + str(i + 1)], self.__cache
 
     @staticmethod
