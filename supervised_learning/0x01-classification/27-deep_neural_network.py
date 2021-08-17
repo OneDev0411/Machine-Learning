@@ -69,7 +69,7 @@ class DeepNeuralNetwork:
         Y is a numpy.ndarray containing the correct labels for the input data
         A is a numpy.ndarray containing the activated output"""
         m = Y.shape[1]
-        cost = -1 / m * np.sum(Y * np.log(A))
+        cost = (-1 / m) * np.sum(Y * np.log(A))
         return cost
 
     def evaluate(self, X, Y):
@@ -86,13 +86,13 @@ class DeepNeuralNetwork:
           Y is a num py.ndarray containing the correct labels
           A is a numpy.ndarray containing the activated output
           alpha is the learning rate"""
-        m = Y.shape[1]
+        (nx, m) = np.shape(Y)
         grad = cache["A" + str(self.__L)] - Y
         for i in range(self.__L, 0, -1):
             grada = np.matmul(grad, cache["A" + str(i - 1)].T) / m
             gradb = np.sum(grad, axis=1, keepdims=True) / m
             grad = np.matmul(self.__weights["W" + str(i)].T, grad) * (
-                cache["A" + str(i - 1)] * (1 - cache["A" + str(i - 1)]))
+                    cache["A" + str(i - 1)] * (1 - cache["A" + str(i - 1)]))
             self.__weights["W" + str(i)] -= alpha * grada
             self.__weights["b" + str(i)] -= alpha * gradb
 
