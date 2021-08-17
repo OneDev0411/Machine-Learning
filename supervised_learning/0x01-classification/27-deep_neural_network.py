@@ -62,7 +62,7 @@ class DeepNeuralNetwork:
     @staticmethod
     def sig(x):
         """sigmoid function"""
-        return 1.0 / (1.0 + np.exp(-x))
+        return 1 / (1 + np.exp(-x))
 
     def cost(self, Y, A):
         """Calculates the cost of the model using logistic regression
