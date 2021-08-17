@@ -57,7 +57,7 @@ class DeepNeuralNetwork:
                 z2 = np.exp(z)
                 self.__cache['A' + str(i + 1)] = z2 / \
                     np.sum(z2, axis=0, keepdims=True)
-        return self.cache['A' + str(i+1)], self.__cache
+        return self.cache['A' + str(self.__L)], self.__cache
 
     @staticmethod
     def sig(x):
