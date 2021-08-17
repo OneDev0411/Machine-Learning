@@ -48,16 +48,15 @@ class DeepNeuralNetwork:
         X: numpy.ndarray with shape (nx, m) that contains the input data"""
         self.__cache['A0'] = X
         for i in range(self.__L):
-            self.__cache['A' +
-                         str(i +
-                             1)] = self.sig(np.dot(self.__weights["W" +
-                                                                  str(i +
-                                                                      1)],
-                                                   self.__cache["A" +
-                                                                str(i)]) +
-                                            self.__weights["b" +
-                                                           str(i +
-                                                               1)])
+            z = np.dot(self.__weights["W" + str(i + 1)],
+                       self.__cache["A" + str(i)]) +\
+                self.__weights["b" + str(i + 1)]
+            if i == (self.__L - 1):
+                z2 = np.exp(z)
+                self.__cache['A' + str(i + 1)] = z2 / \
+                    np.sum(z2, axis=0, keepdims=True)
+            else:
+                self.__cache['A' + str(i + 1)] = self.sig(z)
         return self.cache["A" + str(self.__L)], self.__cache
 
     @staticmethod
@@ -70,8 +69,7 @@ class DeepNeuralNetwork:
         Y is a numpy.ndarray containing the correct labels for the input data
         A is a numpy.ndarray containing the activated output"""
         (a, m) = np.shape(Y)
-        cost = -1 / m * np.sum(Y * np.log(A) + (1 - Y) *
-                               (np.log(1.0000001 - A)))
+        cost = -1 / m * np.sum(Y * np.log(A))
         return cost
 
     def evaluate(self, X, Y):
@@ -79,8 +77,8 @@ class DeepNeuralNetwork:
         X is a numpy.ndarray tcontaining the input data
         Y is a numpy.ndarray containing the correct labels"""
         pred1, pred2 = self.forward_prop(X)
-        predic2 = np.where(pred2["A" + str(self.__L)] >= 0.5, 1, 0)
-        return predic2, self.cost(Y, pred2["A" + str(self.__L)])
+        predic2 = np.eye(pred1.shape[0])[np.argmax(pred1, axis=0)].T
+        return predic2, self.cost(Y, pred1)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """calculates one pass of gradient descent on the neuron
@@ -144,17 +142,19 @@ class DeepNeuralNetwork:
 
     def save(self, filename):
         """Saves the instance object to a file in pickle format"""
-        if not filename.endswith('.pkl'):
-            filename += '.pkl'
-        with (open(filename, "rb")) as file:
-            pickle.dump(self, file)
+        if not filename:
+            return None
+        if not(filename.endswith(".pkl")):
+            filename = filename + ".pkl"
+        with open(filename, 'wb') as f:
+            return pickle.dump(self, f)
 
     @staticmethod
-    def load():
-        """loads a pickled DeepNeuralNetwork object"""
+    def load(filename):
+        """Loads a pickled DeepNeuralNetwork object"""
         try:
-            with (open(filename, "wb")) as file:
-                loaded_object = pickle.load(file)
-            return loaded_object
+            with open(filename, 'rb') as f:
+                obj = pickle.load(f)
+            return obj
         except FileNotFoundError:
             return None
