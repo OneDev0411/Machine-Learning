@@ -77,7 +77,7 @@ class DeepNeuralNetwork:
         X is a numpy.ndarray tcontaining the input data
         Y is a numpy.ndarray containing the correct labels"""
         pred1, pred2 = self.forward_prop(X)
-        predic2 = np.eye(pred1.shape[0])[np.argmax(pred1, axis=0)].T
+        predic2 = np.where(pred1 == np.amax(pred1, axis=0), 1, 0)
         return predic2, self.cost(Y, pred1)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
