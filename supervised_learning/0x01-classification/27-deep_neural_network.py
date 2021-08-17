@@ -49,7 +49,7 @@ class DeepNeuralNetwork:
         self.__cache['A0'] = X
         for i in range(self.__L):
             z = np.matmul(self.__weights["W" + str(i + 1)],
-                       self.__cache["A" + str(i)]) +\
+                          self.__cache["A" + str(i)]) +\
                 self.__weights["b" + str(i + 1)]
             if i == self.__L - 1:
                 z2 = np.exp(z)
