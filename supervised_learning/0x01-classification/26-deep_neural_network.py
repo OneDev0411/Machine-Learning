@@ -123,7 +123,7 @@ class DeepNeuralNetwork:
                 raise ValueError("step must be positive and <= iterations")
         x = []
         y = []
-        for i in range(iterations + 1):
+        for i in range(iterations):
             A, c = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             if verbose is True and i % step == 0:
