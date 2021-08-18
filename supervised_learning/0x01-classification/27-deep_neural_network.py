@@ -49,27 +49,26 @@ class DeepNeuralNetwork:
         self.__cache['A0'] = X
         for i in range(self.__L):
             z = np.dot(self.__weights["W" + str(i + 1)],
-                          self.__cache["A" + str(i)]) +\
+                       self.__cache["A" + str(i)]) +\
                 self.__weights["b" + str(i + 1)]
             if i != self.__L - 1:
-                self.__cache['A' + str(i + 1)] = self.sig(z)
+                a = self.sig(z)
             else:
-                z2 = np.exp(z)
-                self.__cache['A' + str(i + 1)] = z2 / \
-                    np.sum(z2, axis=0, keepdims=True)
-        return self.cache['A' + str(self.__L)], self.__cache
+                a = np.exp(z) / np.sum(np.exp(z), axis=0)
+            self.__cache['A' + str(i + 1)] = a
+        return self.cache['A'+str(self.L)], self.__cache
 
     @staticmethod
     def sig(x):
         """sigmoid function"""
-        return 1.0 / (1.0 + np.exp(-x))
+        return 1 / (1 + np.exp(-x))
 
     def cost(self, Y, A):
         """Calculates the cost of the model using logistic regression
         Y is a numpy.ndarray containing the correct labels for the input data
         A is a numpy.ndarray containing the activated output"""
         m = Y.shape[1]
-        cost = (-1 / m) * np.sum(Y * np.log(A))
+        cost = 1 / m*np.sum(-(Y * np.log(A)))
         return cost
 
     def evaluate(self, X, Y):
@@ -92,7 +91,7 @@ class DeepNeuralNetwork:
             grada = np.matmul(grad, cache["A" + str(i - 1)].T) / m
             gradb = np.sum(grad, axis=1, keepdims=True) / m
             grad = np.matmul(self.__weights["W" + str(i)].T, grad) * (
-                    cache["A" + str(i - 1)] * (1 - cache["A" + str(i - 1)]))
+                cache["A" + str(i - 1)] * (1 - cache["A" + str(i - 1)]))
             self.__weights["W" + str(i)] -= alpha * grada
             self.__weights["b" + str(i)] -= alpha * gradb
 
@@ -121,7 +120,7 @@ class DeepNeuralNetwork:
                 raise ValueError("step must be positive and <= iterations")
         x = []
         y = []
-        for i in range(iterations + 1):
+        for i in range(iterations):
             A, c = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             if verbose is True and i % step == 0:
@@ -129,10 +128,9 @@ class DeepNeuralNetwork:
                     "Cost after {} iterations: {}".format(
                         i, self.cost(
                             Y, A)))
-                if graph:
-                    x.append(self.cost(Y, A))
-                    y.append(i)
-        if graph is True:
+                x.append(self.cost(Y, A))
+                y.append(i)
+        if graph:
             plt.plot(y, x, color="blue")
             plt.xlabel('iteration')
             plt.ylabel('cost')
@@ -144,17 +142,17 @@ class DeepNeuralNetwork:
         """Saves the instance object to a file in pickle format"""
         if not filename:
             return None
-        if not(filename.endswith(".pkl")):
+        if not (filename.endswith(".pkl")):
             filename = filename + ".pkl"
         with open(filename, 'wb') as f:
-            return pickle.dump(self, f)
+            pickle.dump(self, f)
+            f.close()
 
     @staticmethod
     def load(filename):
         """Loads a pickled DeepNeuralNetwork object"""
         try:
             with open(filename, 'rb') as f:
-                obj = pickle.load(f)
-            return obj
+                return pickle.load(f)
         except FileNotFoundError:
             return None
