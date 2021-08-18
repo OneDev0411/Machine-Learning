@@ -145,7 +145,7 @@ class DeepNeuralNetwork:
                         i, self.cost(
                             Y, A)))
                 x.append(self.cost(Y, A))
-                y.append(i + step)
+                y.append(i)
         if graph:
             plt.plot(y, x, color="blue")
             plt.xlabel('iteration')
