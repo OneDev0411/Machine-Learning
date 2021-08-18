@@ -102,14 +102,14 @@ class DeepNeuralNetwork:
         for i in range(self.__L, 0, -1):
             grada = np.matmul(grad, cache["A" + str(i - 1)].T) / m
             gradb = np.sum(grad, axis=1, keepdims=True) / m
-            self.__weights["W" + str(i)] -= alpha * grada
-            self.__weights["b" + str(i)] -= alpha * gradb
             if self.activation == 'sig':
                 grad = np.matmul(self.__weights["W" + str(i)].T, grad) * (
                     cache["A" + str(i - 1)] * (1 - cache["A" + str(i - 1)]))
             elif self.activation == 'tanh':
                 grad = np.matmul(self.__weights["W" + str(i)].T, grad) * (
                     1 - np.power(cache["A" + str(i - 1)], 2))
+            self.__weights["W" + str(i)] -= alpha * grada
+            self.__weights["b" + str(i)] -= alpha * gradb
 
     def train(
             self,
@@ -139,13 +139,13 @@ class DeepNeuralNetwork:
         for i in range(iterations):
             A, c = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
-            if verbose and i % step == 0:
+            if verbose and (i < 1 or i % step == 0):
                 print(
                     "Cost after {} iterations: {}".format(
                         i, self.cost(
                             Y, A)))
                 x.append(self.cost(Y, A))
-                y.append(i)
+                y.append(i + step)
         if graph:
             plt.plot(y, x, color="blue")
             plt.xlabel('iteration')
