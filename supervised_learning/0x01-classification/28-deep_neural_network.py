@@ -139,7 +139,7 @@ class DeepNeuralNetwork:
         for i in range(iterations):
             A, c = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
-            if verbose and (i < 1 or i % step == 0):
+            if verbose and i % step == 0:
                 print(
                     "Cost after {} iterations: {}".format(
                         i, self.cost(
