@@ -55,18 +55,18 @@ class DeepNeuralNetwork:
         X: numpy.ndarray with shape (nx, m) that contains the input data"""
         self.__cache['A0'] = X
         for i in range(self.__L):
-            z = np.dot(self.__weights["W" + str(i + 1)],
-                       self.__cache["A" + str(i)]) +\
+            z = np.matmul(self.__weights["W" + str(i + 1)],
+                          self.__cache["A" + str(i)]) +\
                 self.__weights["b" + str(i + 1)]
             if i != self.__L - 1:
                 if self.activation == 'sig':
-                    a = self.sig(z)
-                else:
-                    a = self.tanh(z)
+                    self.__cache['A' + str(i + 1)] = self.sig(z)
+                elif self.activation == 'tanh':
+                    self.__cache['A' + str(i + 1)] = self.tanh(z)
             else:
-                a = np.exp(z) / np.sum(np.exp(z), axis=0)
-            self.__cache['A' + str(i + 1)] = a
-        return self.cache['A'+str(self.L)], self.__cache
+                self.__cache['A' + str(i + 1)] = np.exp(z) / \
+                    np.sum(np.exp(z), axis=0)
+        return self.cache['A' + str(self.L)], self.__cache
 
     @staticmethod
     def sig(x):
@@ -83,7 +83,7 @@ class DeepNeuralNetwork:
         Y is a numpy.ndarray containing the correct labels for the input data
         A is a numpy.ndarray containing the activated output"""
         m = Y.shape[1]
-        cost = 1 / m*np.sum(-(Y * np.log(A)))
+        cost = 1 / m * np.sum(-(Y * np.log(A)))
         return cost
 
     def evaluate(self, X, Y):
@@ -95,24 +95,21 @@ class DeepNeuralNetwork:
         return predic2, self.cost(Y, pred1)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
-        """calculates one pass of gradient descent on the neuron
-          X is a numpy.ndarray containing the input data
-          Y is a num py.ndarray containing the correct labels
-          A is a numpy.ndarray containing the activated output
+        """calculates gradient descent
           alpha is the learning rate"""
         (nx, m) = np.shape(Y)
         grad = cache["A" + str(self.__L)] - Y
         for i in range(self.__L, 0, -1):
             grada = np.matmul(grad, cache["A" + str(i - 1)].T) / m
             gradb = np.sum(grad, axis=1, keepdims=True) / m
+            self.__weights["W" + str(i)] -= alpha * grada
+            self.__weights["b" + str(i)] -= alpha * gradb
             if self.activation == 'sig':
                 grad = np.matmul(self.__weights["W" + str(i)].T, grad) * (
                     cache["A" + str(i - 1)] * (1 - cache["A" + str(i - 1)]))
-            else:
+            elif self.activation == 'tanh':
                 grad = np.matmul(self.__weights["W" + str(i)].T, grad) * (
-                    cache["A" + str(i - 1)] * (1 - np.power(cache["A" + str(i - 1)], 2)))
-            self.__weights["W" + str(i)] -= alpha * grada
-            self.__weights["b" + str(i)] -= alpha * gradb
+                    1 - np.power(cache["A" + str(i - 1)], 2))
 
     def train(
             self,
@@ -123,7 +120,7 @@ class DeepNeuralNetwork:
             verbose=True,
             graph=True,
             step=100):
-        """Trains the neuron"""
+        """Trains the network"""
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
         elif iterations < 0:
@@ -142,13 +139,13 @@ class DeepNeuralNetwork:
         for i in range(iterations):
             A, c = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
-            if verbose is True and i % step == 0:
+            if verbose and (i < 1 or i % step == 0):
                 print(
                     "Cost after {} iterations: {}".format(
                         i, self.cost(
                             Y, A)))
                 x.append(self.cost(Y, A))
-                y.append(i)
+                y.append(i + step)
         if graph:
             plt.plot(y, x, color="blue")
             plt.xlabel('iteration')
