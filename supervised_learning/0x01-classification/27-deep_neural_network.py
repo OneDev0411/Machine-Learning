@@ -48,7 +48,7 @@ class DeepNeuralNetwork:
         X: numpy.ndarray with shape (nx, m) that contains the input data"""
         self.__cache['A0'] = X
         for i in range(self.__L):
-            z = np.matmul(self.__weights["W" + str(i + 1)],
+            z = np.dot(self.__weights["W" + str(i + 1)],
                           self.__cache["A" + str(i)]) +\
                 self.__weights["b" + str(i + 1)]
             if i != self.__L - 1:
@@ -62,7 +62,7 @@ class DeepNeuralNetwork:
     @staticmethod
     def sig(x):
         """sigmoid function"""
-        return 1 / (1 + np.exp(-x))
+        return 1.0 / (1.0 + np.exp(-x))
 
     def cost(self, Y, A):
         """Calculates the cost of the model using logistic regression
