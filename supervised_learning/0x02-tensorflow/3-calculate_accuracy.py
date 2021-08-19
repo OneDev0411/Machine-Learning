@@ -8,6 +8,6 @@ def calculate_accuracy(y, y_pred):
     y_pred is a tensor containing the network’s predictions"""
     accuracy = tf.math.reduce_mean(
         tf.cast(tf.equal(
-            tf.argmax(y),
-            tf.argmax(y_pred)), tf.float32))
+            tf.argmax(y, axis=-1),
+            tf.argmax(y_pred, axis=-1)), tf.float32))
     return accuracy
