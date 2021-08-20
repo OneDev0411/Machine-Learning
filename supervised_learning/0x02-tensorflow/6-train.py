@@ -2,7 +2,12 @@
 """function that builds, trains,
 and saves a neural network classifier"""
 import tensorflow as tf
-
+create_placeholders = __import__(
+    '0-create_placeholders').create_placeholders
+forward_prop = __import__('2-forward_prop').forward_prop
+calculate_accuracy = __import__('3-calculate_accuracy').calculate_accuracy
+calculate_loss = __import__('4-calculate_loss').calculate_loss
+create_train_op = __import__('5-create_train_op').create_train_op
 
 def train(
         X_train,
@@ -25,13 +30,6 @@ def train(
     alpha is the learning rate
     iterations is the number of iterations to train over
     save_path designates where to save the model"""
-    create_placeholders = __import__(
-        '0-create_placeholders').create_placeholders
-    forward_prop = __import__('2-forward_prop').forward_prop
-    calculate_accuracy = __import__('3-calculate_accuracy').calculate_accuracy
-    calculate_loss = __import__('4-calculate_loss').calculate_loss
-    create_train_op = __import__('5-create_train_op').create_train_op
-
     x, y = create_placeholders(X_train.shape[1], Y_train.shape[1])
     Y_pred = forward_prop(x, layer_sizes, activations)
     loss = calculate_loss(y, Y_pred)
