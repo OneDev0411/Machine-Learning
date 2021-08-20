@@ -50,12 +50,12 @@ def train(
             tAccuracy = sess.run(accuracy, feed_dict={x: X_train, y: Y_train})
             vLoss = sess.run(loss, feed_dict={x: X_valid, y: Y_valid})
             vAccuracy = sess.run(accuracy, feed_dict={x: X_valid, y: Y_valid})
+            if i < iterations:
+                sess.run(train_op, feed_dict={x: X_train, y: Y_train})
             if i % 100 == 0 or i == iterations:
                 print("After {} iterations:".format(i))
                 print("\tTraining Cost: {}".format(tLoss))
                 print("\tTraining Accuracy: {}".format(tAccuracy))
                 print("\tValidation Cost: {}".format(vLoss))
                 print("\tValidation Accuracy: {}".format(vAccuracy))
-            if i < iterations:
-                sess.run(train_op, feed_dict={x: X_train, y: Y_train})
         return saver.save(sess, save_path)
