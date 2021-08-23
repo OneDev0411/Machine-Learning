@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """creates a confusion matrix"""
-import numpy
 import numpy as np
 
 
