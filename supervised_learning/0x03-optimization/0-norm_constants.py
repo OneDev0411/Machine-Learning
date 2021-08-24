@@ -8,7 +8,6 @@ def normalization_constants(X):
     m is the number of data points
     nx is the number of features"""
     m, nx = np.shape(X)
-    print(m, nx)
     mean = np.zeros(nx,)
     stdev = np.zeros(nx,)
     for i in range(nx):
