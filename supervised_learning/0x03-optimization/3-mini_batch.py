@@ -31,7 +31,7 @@ def train_mini_batch(
             vAccuracy = sess.run(accuracy, feed_dict={x: X_valid, y: Y_valid})
             print("After {} epochs:".format(i))
             print("\tTraining Cost: {}".format(tLoss))
-            print("\t\tTraining Accuracy: {}".format(tAccuracy))
+            print("\tTraining Accuracy: {}".format(tAccuracy))
             print("\tValidation Cost: {}".format(vLoss))
             print("\tValidation Accuracy: {}".format(vAccuracy))
             if i != epochs:
