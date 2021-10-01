@@ -14,7 +14,7 @@ def train_mini_batch(
         epochs=5,
         load_path="/tmp/model.ckpt",
         save_path="/tmp/model.ckpt"):
-    """X_train is the numpy.ndarray of shape (m, 784) containing the training data"""
+    """X_train is the numpy.ndarray containing the training data"""
     with tf.Session() as sess:
         saver = tf.train.import_meta_graph(load_path + ".meta")
         saver.restore(sess, load_path)
@@ -31,7 +31,7 @@ def train_mini_batch(
             vAccuracy = sess.run(accuracy, feed_dict={x: X_valid, y: Y_valid})
             print("After {} epochs:".format(i))
             print("\tTraining Cost: {}".format(tLoss))
-            print("\t\tTraining Accuracy:: {}".format(tAccuracy))
+            print("\t\tTraining Accuracy: {}".format(tAccuracy))
             print("\tValidation Cost: {}".format(vLoss))
             print("\tValidation Accuracy: {}".format(vAccuracy))
             if i != epochs:
@@ -47,7 +47,8 @@ def train_mini_batch(
                         end = X_train.shape[0]
                     else:
                         end = j * batch_size + batch_size
-                    X_batch, Y_batch = X_shuffle[start:end], Y_shuffle[start:end]
+                    X_batch = X_shuffle[start:end]
+                    Y_batch = Y_shuffle[start:end]
                     sess.run(train_op, {x: X_batch, y: Y_batch})
                     loss_train = sess.run(loss, {x: X_batch, y: Y_batch})
                     acc_train = sess.run(accuracy, {x: X_batch, y: Y_batch})
