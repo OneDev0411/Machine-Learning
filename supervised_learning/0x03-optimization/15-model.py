@@ -11,6 +11,7 @@ def create_placeholders(nx, classes):
     y = tf.placeholder("float", [None, classes], "y")
     return x, y
 
+
 def create_layer(prev, n, activation):
     """prev is the tensor output of the previous layer
     n is the number of nodes in the layer to create
@@ -61,6 +62,13 @@ def shuffle_data(X, Y):
     return X[p], Y[p]
 
 
+def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
+    """function that that creates a learning rate decay operation
+     in tensorflow using inverse time decay:"""
+    return tf.train.inverse_time_decay(
+        alpha, global_step, decay_step, decay_rate, staircase=True)
+
+
 def create_Adam_op(loss, alpha, beta1, beta2, epsilon):
     """ that creates the training operation for a neural network
     in tensorflow using the Adam optimization algorithm"""
@@ -97,6 +105,12 @@ def model(
     loss = calculate_loss(y=y, y_pred=y_pred)
     accuracy = calculate_accuracy(y, y_pred)
     train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
+    step = tf.Variable(0, trainable=False)
+    steps = tf.assign_add(step, 1, name="step")
+    batch = X_train.shape[0] // batch_size
+    if batch % batch_size != 0:
+        batch += 1
+    alpha = learning_rate_decay(alpha, decay_rate, step, batch)
     tf.add_to_collection("x", x)
     tf.add_to_collection("y", y)
     tf.add_to_collection("y_pred", y_pred)
