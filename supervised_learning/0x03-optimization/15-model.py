@@ -35,7 +35,8 @@ def forward_prop(x, layer_sizes=[], activations=[], epsilon=1e-8):
             layer = create_layer(x, layer_sizes[i], activations[i])
             x = layer
         else:
-            x = create_batch_norm_layer(x, layer_sizes[i], activations[i], epsilon)
+            x = create_batch_norm_layer(
+                x, layer_sizes[i], activations[i], epsilon)
     return x
 
 
@@ -104,13 +105,13 @@ def model(
     y_pred = forward_prop(x, layers, activations, epsilon)
     loss = calculate_loss(y=y, y_pred=y_pred)
     accuracy = calculate_accuracy(y, y_pred)
-    train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
-    step = tf.Variable(0, trainable=False)
-    steps = tf.assign_add(step, 1, name="step")
     batch = X_train.shape[0] // batch_size
     if batch % batch_size != 0:
         batch += 1
+    step = tf.Variable(0, trainable=False)
+    steps = tf.assign_add(step, 1, name="steps")
     alpha = learning_rate_decay(alpha, decay_rate, step, batch)
+    train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
     tf.add_to_collection("x", x)
     tf.add_to_collection("y", y)
     tf.add_to_collection("y_pred", y_pred)
@@ -146,11 +147,11 @@ def model(
                         end = j * batch_size + batch_size
                     X_batch = X_shuffle[start:end]
                     Y_batch = Y_shuffle[start:end]
-                    sess.run(train_op, {x: X_batch, y: Y_batch})
+                    sess.run((train_op, steps), {x: X_batch, y: Y_batch})
                     loss_train = sess.run(loss, {x: X_batch, y: Y_batch})
                     acc_train = sess.run(accuracy, {x: X_batch, y: Y_batch})
-                    if (j+1) % 100 == 0 and j != 0:
-                        print('\tStep {}:'.format(j+1))
+                    if (j + 1) % 100 == 0 and j != 0:
+                        print('\tStep {}:'.format(j + 1))
                         print('\t\tCost: {}'.format(loss_train))
                         print('\t\tAccuracy: {}'.format(acc_train))
         return saver.save(sess, save_path)
