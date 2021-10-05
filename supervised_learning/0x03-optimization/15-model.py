@@ -107,9 +107,10 @@ def model(
     accuracy = calculate_accuracy(y, y_pred)
     batch = X_train.shape[0] // batch_size
     if batch % batch_size != 0:
-        batch += 1
-    step = tf.Variable(0, trainable=False)
-    steps = tf.assign_add(step, 1, name="steps")
+        batch = int(batch + 1)
+    else:
+        batch = int(batch)
+    step = tf.Variable(0)
     alpha = learning_rate_decay(alpha, decay_rate, step, batch)
     train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
     tf.add_to_collection("x", x)
@@ -123,7 +124,6 @@ def model(
     with tf.Session() as sess:
         sess.run(init)
         for i in range(epochs + 1):
-            X_shuffle, Y_shuffle = shuffle_data(X_train, Y_train)
             tLoss = sess.run(loss, feed_dict={x: X_train, y: Y_train})
             tAccuracy = sess.run(accuracy, feed_dict={x: X_train, y: Y_train})
             vLoss = sess.run(loss, feed_dict={x: X_valid, y: Y_valid})
@@ -134,6 +134,7 @@ def model(
             print("\tValidation Cost: {}".format(vLoss))
             print("\tValidation Accuracy: {}".format(vAccuracy))
             if i != epochs:
+                X_shuffle, Y_shuffle = shuffle_data(X_train, Y_train)
                 batch = X_train.shape[0] // batch_size
                 if batch % batch_size != 0:
                     batch += 1
@@ -148,11 +149,12 @@ def model(
                         end = j * batch_size + batch_size
                     X_batch = X_shuffle[start:end]
                     Y_batch = Y_shuffle[start:end]
-                    sess.run((train_op, steps), {x: X_batch, y: Y_batch})
+                    sess.run(train_op, {x: X_batch, y: Y_batch})
                     loss_train = sess.run(loss, {x: X_batch, y: Y_batch})
                     acc_train = sess.run(accuracy, {x: X_batch, y: Y_batch})
                     if (j + 1) % 100 == 0 and j != 0:
                         print('\tStep {}:'.format(j + 1))
                         print('\t\tCost: {}'.format(loss_train))
                         print('\t\tAccuracy: {}'.format(acc_train))
+            sess.run(tf.assign(step, step + 1))
         return saver.save(sess, save_path)
