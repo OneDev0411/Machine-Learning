@@ -106,10 +106,10 @@ def model(
     loss = calculate_loss(y=y, y_pred=y_pred)
     accuracy = calculate_accuracy(y, y_pred)
     batch = X_train.shape[0] // batch_size
-    if batch % batch_size != 0:
+    batcher = 0
+    if batch % 1 != 0:
         batch = int(batch + 1)
-    else:
-        batch = int(batch)
+        batcher = 1
     step = tf.Variable(0)
     alpha = learning_rate_decay(alpha, decay_rate, step, batch)
     train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
@@ -135,18 +135,12 @@ def model(
             print("\tValidation Accuracy: {}".format(vAccuracy))
             if i != epochs:
                 X_shuffle, Y_shuffle = shuffle_data(X_train, Y_train)
-                batch = X_train.shape[0] // batch_size
-                if batch % batch_size != 0:
-                    batch += 1
-                    batcher = 1
-                else:
-                    batcher = 0
                 for j in range(batch):
                     start = j * batch_size
                     if j == batch - 1 and batcher == 1:
                         end = X_train.shape[0]
                     else:
-                        end = j * batch_size + batch_size
+                        end = (j * batch_size) + batch_size
                     X_batch = X_shuffle[start:end]
                     Y_batch = Y_shuffle[start:end]
                     sess.run(train_op, {x: X_batch, y: Y_batch})
