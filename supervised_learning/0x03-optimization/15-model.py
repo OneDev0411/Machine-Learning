@@ -32,8 +32,7 @@ def forward_prop(x, layer_sizes=[], activations=[], epsilon=1e-8):
     Returns: the prediction of the network in tensor form"""
     for i in range(len(layer_sizes)):
         if i == len(layer_sizes) - 1:
-            layer = create_layer(x, layer_sizes[i], activations[i])
-            x = layer
+            x = create_layer(x, layer_sizes[i], activations[i])
         else:
             x = create_batch_norm_layer(
                 x, layer_sizes[i], activations[i], epsilon)
@@ -44,9 +43,11 @@ def calculate_accuracy(y, y_pred):
     """y is a placeholder for the labels of the input data
     y_pred is a tensor containing the network’s predictions"""
     accuracy = tf.math.reduce_mean(
-        tf.cast(tf.equal(
-            tf.argmax(y, axis=-1),
-            tf.argmax(y_pred, axis=-1)), tf.float32))
+        tf.cast(
+            tf.equal(
+                tf.argmax(
+                    y_pred, axis=1), tf.argmax(
+                    y, axis=1)), tf.float32))
     return accuracy
 
 
@@ -106,47 +107,45 @@ def model(
     loss = calculate_loss(y=y, y_pred=y_pred)
     accuracy = calculate_accuracy(y, y_pred)
     batch = X_train.shape[0] // batch_size
-    batcher = 0
     if batch % 1 != 0:
-        batch = int(batch + 1)
-        batcher = 1
+        batch = batch + 1
     step = tf.Variable(0)
     alpha = learning_rate_decay(alpha, decay_rate, step, batch)
     train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
-    tf.add_to_collection("x", x)
-    tf.add_to_collection("y", y)
     tf.add_to_collection("y_pred", y_pred)
     tf.add_to_collection("loss", loss)
     tf.add_to_collection("accuracy", accuracy)
     tf.add_to_collection("train_op", train_op)
+    tf.add_to_collection("x", x)
+    tf.add_to_collection("y", y)
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
     with tf.Session() as sess:
         sess.run(init)
         for i in range(epochs + 1):
-            tLoss = sess.run(loss, feed_dict={x: X_train, y: Y_train})
-            tAccuracy = sess.run(accuracy, feed_dict={x: X_train, y: Y_train})
-            vLoss = sess.run(loss, feed_dict={x: X_valid, y: Y_valid})
-            vAccuracy = sess.run(accuracy, feed_dict={x: X_valid, y: Y_valid})
+            X_shuffle, Y_shuffle = shuffle_data(X_train, Y_train)
+            tLoss, tAccuracy = sess.run(
+                [loss, accuracy], {x: X_train, y: Y_train})
+            vLoss, vAccuracy = sess.run(
+                [loss, accuracy], {x: X_valid, y: Y_valid})
             print("After {} epochs:".format(i))
             print("\tTraining Cost: {}".format(tLoss))
             print("\tTraining Accuracy: {}".format(tAccuracy))
             print("\tValidation Cost: {}".format(vLoss))
             print("\tValidation Accuracy: {}".format(vAccuracy))
-            if i != epochs:
-                X_shuffle, Y_shuffle = shuffle_data(X_train, Y_train)
+            if i < epochs:
                 for j in range(batch):
                     start = j * batch_size
-                    if j == batch - 1 and batcher == 1:
+                    end = (j * batch_size) + batch_size
+                    if end > X_train.shape[0]:
                         end = X_train.shape[0]
-                    else:
-                        end = (j * batch_size) + batch_size
                     X_batch = X_shuffle[start:end]
                     Y_batch = Y_shuffle[start:end]
                     sess.run(train_op, {x: X_batch, y: Y_batch})
-                    loss_train = sess.run(loss, {x: X_batch, y: Y_batch})
-                    acc_train = sess.run(accuracy, {x: X_batch, y: Y_batch})
-                    if (j + 1) % 100 == 0 and j != 0:
+                    if (j + 1) % 100 == 0 and j > 0:
+                        loss_train = sess.run(loss, {x: X_batch, y: Y_batch})
+                        acc_train = sess.run(
+                            accuracy, {x: X_batch, y: Y_batch})
                         print('\tStep {}:'.format(j + 1))
                         print('\t\tCost: {}'.format(loss_train))
                         print('\t\tAccuracy: {}'.format(acc_train))
