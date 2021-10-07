@@ -14,5 +14,5 @@ def dropout_create_layer(prev, n, activation, keep_prob):
         activation,
         kernel_initializer=tf.contrib.layers.variance_scaling_initializer(
             mode="FAN_AVG"),
-        kernel_regularizer=tf.layers.dropout(keep_prob))
+        kernel_regularizer=tf.layers.Dropout(keep_prob))
     return layer(prev)
