@@ -14,7 +14,8 @@ def save_config(network, filename):
 
 def load_config(filename):
     """network: the model to which the weights should be loaded
-    filename is the path of the file that the configuration should be loaded from
+    filename is the path of the file that the configuration
+    should be loaded from
     Returns: the loaded model"""
     with open(filename, "r") as f:
         conf = f.read()
