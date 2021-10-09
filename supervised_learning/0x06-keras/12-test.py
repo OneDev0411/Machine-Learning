@@ -11,4 +11,4 @@ def test_model(network, data, labels, verbose=True):
     printed during the testing process
     Returns: None
     """
-    network.evaluate(data, labels, verbose=verbose)
+    return network.evaluate(data, labels, verbose=verbose)
