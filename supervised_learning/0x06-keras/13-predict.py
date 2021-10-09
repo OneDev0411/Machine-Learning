@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""functions that makes a prediction using a neural network:"""
+"""functions that makes a prediction using a neural network"""
 import tensorflow.keras as K
 
 
