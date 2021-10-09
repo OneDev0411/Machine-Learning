@@ -38,19 +38,21 @@ def train_model(
     def scheduler(epoch):
         return alpha / (1 + (decay_rate * epoch))
     model = network
-    stop_callback, lrd_callback = None, None
+    callbacks = []
     if early_stopping:
-        stop_callback = K.callbacks.EarlyStopping(
-            monitor='val_loss', patience=patience)
+        callbacks.append(K.callbacks.EarlyStopping(
+            monitor='val_loss', patience=patience))
     if learning_rate_decay and validation_data:
-        lrd_callback = K.callbacks.LearningRateScheduler(scheduler, verbose=1)
+        callbacks.append(
+            K.callbacks.LearningRateScheduler(
+                scheduler, verbose=1))
     hist_obj = model.fit(
         x=data,
         y=labels,
         batch_size=batch_size,
         epochs=epochs,
         verbose=verbose,
-        callbacks=[stop_callback, lrd_callback],
+        callbacks=callbacks,
         validation_data=validation_data,
         shuffle=shuffle,
     )
