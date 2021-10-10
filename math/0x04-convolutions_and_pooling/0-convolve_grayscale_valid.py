@@ -22,5 +22,5 @@ def convolve_grayscale_valid(images, kernel):
         row = i // out_w
         col = i % out_w
         conv[:, row, col] = (
-                images[:, row:kh + row, col:kw + col] * kernel).sum(axis=(1, 2))
+            images[:, row:kh + row, col:kw + col] * kernel).sum(axis=(1, 2))
     return conv
