@@ -34,5 +34,6 @@ def pool(images, kernel_shape, stride, mode='max'):
             ).max(axis=(1, 2))
         elif mode == 'avg':
             conv[:, row, col, :] = np.average(
-                images[:, row * sh:kh + row * sh, col * sw:kw + col * sw, :], axis=(1, 2))
+                images[:, row * sh:kh + row * sh, col * sw:kw + col * sw, :],
+                axis=(1, 2))
     return conv
