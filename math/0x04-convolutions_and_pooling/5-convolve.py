@@ -40,6 +40,6 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
         col = i % out_w
         for kernel in range(nc):
             conv[:, row, col, kernel] = (
-                    padded[:, row * sh:kh + row * sh, col * sw:kw + col * sw, :]
-                    * kernels[:, :, :, kernel]).sum(axis=(1, 2, 3))
+                padded[:, row * sh:kh + row * sh, col * sw:kw + col * sw, :] *
+                kernels[:, :, :, kernel]).sum(axis=(1, 2, 3))
     return conv
