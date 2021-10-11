@@ -37,7 +37,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     for i in range(0, (out_h * out_w)):
         row = i // out_w
         col = i % out_w
-        conv[:, row, col, :] = (
+        conv[:, row, col] = (
                 padded[:, row * sh:kh + row * sh, col * sw:kw + col * sw, :]
                 * kernel).sum(axis=(1, 2, 3))
     return conv
