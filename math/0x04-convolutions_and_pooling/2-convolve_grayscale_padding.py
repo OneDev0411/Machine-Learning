@@ -25,9 +25,9 @@ def convolve_grayscale_padding(images, kernel, padding):
     conv = np.zeros(shape=(m, out_h, out_w))
     padded = np.zeros(shape=(m, h + (pad_h * 2), w + (pad_w * 2)))
     padded[:, pad_h:-pad_h, pad_w:-pad_w] = images
-    for i in range(0, (h * w)):
-        row = i // w
-        col = i % w
+    for i in range(0, (out_h * out_w)):
+        row = i // out_w
+        col = i % out_w
         conv[:, row, col] = (
             padded[:, row:kh + row, col:kw + col] * kernel).sum(axis=(1, 2))
     return conv
