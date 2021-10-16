@@ -62,5 +62,4 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
                                                  :,
                                                  :,
                                                  kernel]
-    dA_prev = dA_prev_pad[:, pad_h:h_prev + pad_h, pad_w:pad_w + w_prev, :]
-    return dA_prev, dW, db
+    return dA_prev_pad, dW, db
