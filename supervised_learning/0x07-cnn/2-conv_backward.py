@@ -35,31 +35,23 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     kh, kw, c_prev, c_new = W.shape
     sh, sw = stride
     if padding == 'same':
-        pad_h = (((h_prev - 1) * sh + kh - h_prev) // 2)
-        pad_w = (((w_prev - 1) * sw + kw - w_prev) // 2)
+        pad_h = int(np.ceil(((h_prev - 1) * sh + kh - h_prev) / 2))
+        pad_w = int(np.ceil(((w_prev - 1) * sw + kw - w_prev) / 2))
     else:
         pad_h, pad_w = 0, 0
-    A_prev_pad = np.pad(
+    A_prevp = np.pad(
         A_prev, ((0,), (pad_h,), (pad_w,), (0,)), 'constant')
     dW = np.zeros(shape=(kh, kw, c_prev, c_new))
-    dA_prev_pad = np.zeros_like(A_prev_pad)
+    dA_prev = np.zeros_like(A_prevp)
     db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
     for im in range(m):
         for i in range(0, (h_new * w_new)):
             row = i // w_new
             col = i % w_new
             for kernel in range(c_new):
-                dW[:, :, :, kernel] += A_prev_pad[
+                dW[:, :, :, kernel] += A_prevp[
                     im, row * sh:kh + row * sh, col * sw:kw + col * sw, :
                 ] * dZ[im, row, col, kernel]
-                dA_prev_pad[im,
-                            row * sh:kh + row * sh,
-                            col * sw:kw + col * sw,
-                            :] += dZ[im,
-                                     row,
-                                     col,
-                                     kernel] * W[:,
-                                                 :,
-                                                 :,
-                                                 kernel]
-    return dA_prev_pad, dW, db
+                dA_prev[im, row * sh:kh + row * sh, col * sw:kw + col * sw, :] += dZ[im, row, col, kernel] * W[:, :, :, kernel]
+    dA_prev = dA_prev[:, pad_h:h_prev + pad_h, pad_w:pad_w + w_prev, :]
+    return dA_prev, dW, db
