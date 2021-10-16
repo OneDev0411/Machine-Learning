@@ -12,7 +12,8 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         h_new: height of the output
         w_new: width of the output
         c_new: number of channels in the output
-    A_prev: numpy array of shape (m, h_prev, w_prev, c_prev) containing the output of the previous layer
+    A_prev: numpy array of shape (m, h_prev, w_prev, c_prev)
+    containing the output of the previous layer
         h_prev: height of the previous layer
         w_prev: width of the previous layer
         c_prev: number of channels in the previous layer
@@ -38,20 +39,20 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         pad_w = (((w_prev - 1) * sw + kw - w_prev) // 2)
     else:
         pad_h, pad_w = 0, 0
-    A_prev_padded = np.pad(A_prev, ((0,), (pad_h,), (pad_w,), (0,)), 'constant')
+    A_prev = np.pad(
+        A_prev, ((0,), (pad_h,), (pad_w,), (0,)), 'constant')
     dW = np.zeros(shape=(kh, kw, c_prev, c_new))
-    dA_prev = np.zeros_like(A_prev_padded)
+    dA_prev = np.zeros_like(A_prev)
     db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
     for im in range(m):
         for i in range(0, (h_new * w_new)):
             row = i // w_new
             col = i % w_new
             for kernel in range(c_new):
-                dW[:, :, :, kernel] += A_prev_padded[
-                                        im, row * sh:kh + row * sh, col * sw:kw + col * sw, :
-                                        ] * dZ[im, row, col, kernel]
-                dA_prev[
-                     im, row*sh:kh+row*sh, col*sw:kw+col*sw, :] += dZ[
-                                                            im, row, col, kernel] * W[:, :, :, kernel]
-    dA_prev = dA_prev[:, pad_h:h_prev+pad_h, pad_w:pad_w+w_prev, :]
+                dW[:, :, :, kernel] += A_prev[
+                    im, row * sh:kh + row * sh, col * sw:kw + col * sw, :
+                ] * dZ[im, row, col, kernel]
+                dA_prev[im, row * sh:kh + row * sh, col * sw:kw + col *
+                        sw, :] += dZ[im, row, col, kernel] * W[:, :, :, kernel]
+    dA_prev = dA_prev[:, pad_h:h_prev + pad_h, pad_w:pad_w + w_prev, :]
     return dA_prev, dW, db
