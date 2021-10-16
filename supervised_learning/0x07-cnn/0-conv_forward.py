@@ -31,8 +31,8 @@ def conv_forward(
     kh, kw, c_prev, c_new = W.shape
     sh, sw = stride
     if padding == 'same':
-        pad_h = (((h_prev - 1) * sh + kh - h_prev) // 2) + 1
-        pad_w = (((w_prev - 1) * sw + kw - w_prev) // 2) + 1
+        pad_h = (((h_prev - 1) * sh + kh - h_prev) // 2)
+        pad_w = (((w_prev - 1) * sw + kw - w_prev) // 2)
     else:
         pad_h, pad_w = 0, 0
     out_h = ((h_prev - kh + 2 * pad_h) // sh) + 1
