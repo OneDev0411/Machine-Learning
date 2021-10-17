@@ -21,7 +21,7 @@ def lenet5(X):
                               kernel_initializer=kernel,
                               activation='relu')(L2_pool)
     L4_pool = K.layers.MaxPool2D(pool_size=(2, 2),
-                                    strides=(2, 2))(L3_conv)
+                                 strides=(2, 2))(L3_conv)
     L4_flat = K.layers.Flatten()(L4_pool)
     L5_fc = K.layers.Dense(units=120,
                            kernel_initializer=kernel,
