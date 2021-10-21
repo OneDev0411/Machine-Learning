@@ -57,6 +57,7 @@ def minor(matrix):
 
 
 def cofactor(matrix):
+    """matrix: list of lists whose cofactor matrix should be calculated"""
     minor_matrix = minor(matrix)
     width = len(matrix)
     if width == 1:
