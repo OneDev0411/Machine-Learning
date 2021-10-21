@@ -102,5 +102,5 @@ def inverse(matrix):
     for i in range(width * width):
         row = i // width
         col = i % width
-        adj[row][col] *= 1 / det
+        adj[row][col] /= det
     return adj
