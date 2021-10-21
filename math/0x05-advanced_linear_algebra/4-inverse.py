@@ -11,7 +11,7 @@ def determinant(matrix):
     elif not all(isinstance(m, list) for m in matrix):
         raise TypeError("matrix must be a list of lists")
     elif not all(len(row) == len(matrix) for row in matrix):
-        raise ValueError("matrix must be a non-empty square matrix")
+        raise ValueError("matrix must be a square matrix")
     width = len(matrix)
     if width == 1:
         return matrix[0][0]
@@ -89,6 +89,13 @@ def adjugate(matrix):
 
 def inverse(matrix):
     """matrix: list of lists whose inverse should be calculated"""
+    if not isinstance(matrix, list) or matrix == []:
+        raise TypeError("matrix must be a list of lists")
+    elif not all(isinstance(m, list) for m in matrix):
+        raise TypeError("matrix must be a list of lists")
+    elif not all(len(row) == len(matrix) for row in matrix
+                 ) or len(matrix[0]) == 0:
+        raise ValueError("matrix must be a non-empty square matrix")
     det = determinant(matrix)
     if det == 0:
         return None
