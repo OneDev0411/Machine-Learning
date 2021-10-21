@@ -82,6 +82,6 @@ def adjugate(matrix):
     for i in range(width):
         buff = []
         for j in range(width):
-            buff.append(cof_matrix[i][j])
+            buff.append(cof_matrix[j][i])
         adj_matrix.append(buff)
     return adj_matrix
