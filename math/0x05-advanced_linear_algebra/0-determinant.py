@@ -8,6 +8,8 @@ def determinant(matrix):
         return 1
     elif not isinstance(matrix, list) or matrix == []:
         raise TypeError("matrix must be a list of lists")
+    elif not all(isinstance(m, list) for m in matrix):
+        raise TypeError("matrix must be a list of lists")
     elif not all(len(row) == len(matrix) for row in matrix):
         raise ValueError("matrix must be a square matrix")
     width = len(matrix)
