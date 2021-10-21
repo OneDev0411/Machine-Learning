@@ -76,8 +76,6 @@ def adjugate(matrix):
     """matrix: list of lists whose adjugate matrix should be calculated"""
     cof_matrix = cofactor(matrix)
     width = len(matrix)
-    if width == 1:
-        return [[1]]
     adj_matrix = []
     for i in range(width):
         buff = []
