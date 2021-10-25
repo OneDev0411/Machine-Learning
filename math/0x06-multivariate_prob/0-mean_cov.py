@@ -2,6 +2,7 @@
 """Function that calculates the mean and covariance of a data set"""
 import numpy as np
 
+
 def mean_cov(X):
     """ X: numpy.ndarray of shape (n, d)
     n: number of data points
@@ -13,6 +14,6 @@ def mean_cov(X):
     n, d = X.shape
     if n < 2:
         raise ValueError("X must contain multiple data points")
-    mean = X.mean(axis=0)
+    mean = X.mean(axis=0, keepdims=True)
     cov = np.matmul((X-mean).T, X-mean) / (n-1)
     return mean, cov
