@@ -9,6 +9,6 @@ def correlation(C):
     if not isinstance(C, np.ndarray):
         raise TypeError("C must be a numpy.ndarray")
     if len(C.shape) != 2 or C.shape[0] != C.shape[1]:
-        raise TypeError("C must be a 2D square matrix")
+        raise ValueError("C must be a 2D square matrix")
     corr = np.outer(np.sqrt(np.diag(C)), np.sqrt(np.diag(C)))
     return C / corr

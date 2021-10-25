@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 
-if __name__ == '__main__':
-    import numpy as np
-    correlation = __import__('1-correlation').correlation
+import numpy as np#!/usr/bin/env python3
 
-    C = np.array([[36, -30, 15], [-30, 100, -20], [15, -20, 25]])
-    Co = correlation(C)
-    print(C)
-    print(Co)
+import numpy as np
+correlation = __import__('1-correlation').correlation
+
+try:
+    correlation(np.array([1, 2, 3, 4]))
+except ValueError as e:
+    print(str(e))
+try:
+    correlation(np.array([[1, 2, 3, 4], [5, 6, 7, 8]]))
+except ValueError as e:
+    print(str(e))
