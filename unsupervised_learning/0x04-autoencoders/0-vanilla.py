@@ -12,9 +12,15 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     inpt = keras.Input(shape=(input_dims,))
     for i in range(len(hidden_layers)):
         if i == 0:
-            enc = (keras.layers.Dense(hidden_layers[i], activation="relu"))(inpt)
+            enc = (
+                keras.layers.Dense(
+                    hidden_layers[i],
+                    activation="relu"))(inpt)
         else:
-            enc = (keras.layers.Dense(hidden_layers[i], activation="relu"))(enc)
+            enc = (
+                keras.layers.Dense(
+                    hidden_layers[i],
+                    activation="relu"))(enc)
     enc = (keras.layers.Dense(latent_dims, activation="relu"))(enc)
     encoder = keras.Model(inpt, enc)
 
