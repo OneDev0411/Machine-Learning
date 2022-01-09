@@ -25,3 +25,13 @@ class Dataset:
         tokenizer_en = ste([en.numpy() for _, en in data],
                            target_vocab_size=2**15)
         return tokenizer_pt, tokenizer_en
+
+    def encode(self, pt, en):
+        """ Encode a translation into tokens """
+        pt_size = self.tokenizer_pt.vocab_size
+        en_size = self.tokenizer_en.vocab_size
+        pt_tokens = [pt_size] + self.tokenizer_pt.encode(
+            pt.numpy().decode('utf-8')) + [pt_size + 1]
+        en_tokens = [en_size] + self.tokenizer_en.encode(
+            en.numpy().decode('utf-8')) + [en_size + 1]
+        return pt_tokens, en_tokens
