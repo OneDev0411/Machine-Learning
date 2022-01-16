@@ -9,7 +9,8 @@ def uni_bleu(references, sentence):
                     the words in the translation
         sentence: list containing the model proposed sentence """
     w = len(sentence)
-    reflen = len(references[np.argmin(np.abs((np.array([len(r) for r in references])) - w))])
+    reflen = len(references[np.argmin(np.abs(
+        (np.array([len(r) for r in references])) - w))])
     if w < reflen:
         brevity_p = np.exp(1 - (reflen / w))
     else:
