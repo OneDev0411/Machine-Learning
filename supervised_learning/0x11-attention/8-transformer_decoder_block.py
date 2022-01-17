@@ -12,7 +12,7 @@ class DecoderBlock(tf.keras.layers.Layer):
         """ dm: integer representing the dimensionality of the model
             h: integer representing the number of heads
             dm: divisible by h """
-        super(decoderBlock, self).__init__()
+        super(DecoderBlock, self).__init__()
         self.mha1 = MultiHeadAttention(dm, h)
         self.mha2 = MultiHeadAttention(dm, h)
         self.dense_hidden = tf.keras.layers.Dense(
