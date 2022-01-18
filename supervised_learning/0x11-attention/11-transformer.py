@@ -56,7 +56,7 @@ class Transformer(tf.keras.layers.Layer):
             encoder_mask,
             look_ahead_mask,
             decoder_mask):
-        """ inputs - a tensor of shape (batch, input_seq_len)containing the inputs
+        """ inputs - a tensor of shape containing the inputs
             target - a tensor containing the target
             training - a boolean to determine if the model is training
             encoder_mask - the padding mask to be applied to the encoder
