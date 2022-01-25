@@ -10,11 +10,15 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
         kmin: integer containing the minimum number of clusters to check for
         kmax: integer containing the maximum number of clusters to check for
         iterations: integer containing the number of iterations for K-means"""
+    if not isinstance(kmin, int) or not isinstance(
+            kmax, int) or kmin < 1 or kmin >= kmax:
+        return None, None
     try:
         results, d_vars = [], []
-        Svar = variance(X, kmeans(X, kmin)[0])
         for i in range(kmin, kmax + 1):
             C, clss = kmeans(X, i, iterations)
+            if i == kmin:
+                Svar = variance(X, C)
             results.append((C, clss))
             d_vars.append(Svar - variance(X, C))
         return results, d_vars
