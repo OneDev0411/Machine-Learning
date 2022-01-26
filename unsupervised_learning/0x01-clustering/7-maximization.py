@@ -9,8 +9,11 @@ def maximization(X, g):
         g: numpy.ndarray of shape (k, n) contains the posterior probability
         for each data point in each cluster"""
     try:
-        if not isinstance(X, np.ndarray) or len(X.shape) != 2 or not isinstance(
-                g, np.ndarray) or len(g.shape) != 2 or X.shape[0] != g.shape[1]:
+        if not isinstance(X, np.ndarray) or len(
+                    X.shape) != 2 or not isinstance(g, np.ndarray) or len(
+                    g.shape) != 2 or X.shape[0] != g.shape[1]:
+            return None, None, None
+        if not np.all(np.isclose(g.sum(axis=0), 1)):
             return None, None, None
         pi = g.sum(axis=1) / X.shape[0]
         m = np.dot(g, X) / g.sum(axis=1)[:, np.newaxis]
