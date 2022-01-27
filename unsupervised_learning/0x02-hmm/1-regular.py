@@ -14,10 +14,10 @@ def regular(P):
         steady = np.zeros((1, dim))
         q = (P-np.eye(dim))
         ones = np.ones(dim)
-        q = np.c_[q,ones]
+        q = np.c_[q, ones]
         QTQ = np.dot(q, q.T)
         bQT = np.ones(dim)
-        solve = np.linalg.solve(QTQ,bQT)
+        solve = np.linalg.solve(QTQ, bQT)
         for i in range(dim):
             steady[0][i] = solve[i]
         return steady
