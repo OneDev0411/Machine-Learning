@@ -21,7 +21,7 @@ def viterbi(Observation, Emission, Transition, Initial):
             vit[j, i] = np.argmax(prob, 0)
     path = [np.argmax(viterbi[:, T - 1])] + []
     prev = np.argmax(viterbi[:, T - 1])
-    for t in range(T - 2, -1, -1):
-        prev = int(vit[prev, t])
+    for i in range(T - 1, 0, -1):
+        prev = int(vit[prev, i])
         path = [prev] + path
     return path, np.max(viterbi[:, T - 1])
