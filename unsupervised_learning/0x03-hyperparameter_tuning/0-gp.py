@@ -21,9 +21,9 @@ class GaussianProcess:
         self.sigma_f = sigma_f
         self.K = self.kernel(X_init, X_init)
 
-
     def kernel(self, X1, X2):
         """ X1:  numpy.ndarray of shape (m, 1)
             X2:  numpy.ndarray of shape (n, 1) """
-        sq = np.sum(X1**2, 1).reshape(-1, 1) + np.sum(X2**2, 1) -2 * np.dot(X1, X2.T)
+        sq = np.sum(X1**2, 1).reshape(-1, 1) + np.sum(X2**2, 1) - 2 * np.dot(
+                X1, X2.T)
         return (self.sigma_f ** 2) * np.exp((-1 / (2 * self.l ** 2)) * sq)
