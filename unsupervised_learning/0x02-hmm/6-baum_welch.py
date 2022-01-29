@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" function that performs the Baum-Welch algorithm for a hidden markov model"""
+""" function that performs the Baum-Welch
+algorithm for a hidden markov model"""
 import numpy as np
 
 
