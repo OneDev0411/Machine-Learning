@@ -35,4 +35,4 @@ class GaussianProcess:
         s_kernel = self.kernel(X_s, X_s)
         kernel_inv = np.linalg.inv(self.K)
         return kernel.T.dot(kernel_inv).dot(self.Y).reshape(-1), (
-                s_kernel - kernel.T.dot(kernel_inv).dot(kernel)).diagonal()
+            s_kernel - kernel.T.dot(kernel_inv).dot(kernel)).diagonal()
