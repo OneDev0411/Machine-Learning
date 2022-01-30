@@ -41,14 +41,22 @@ class BayesianOptimization:
 
     def acquisition(self):
         """ instancethat calculates the next best sample location"""
-        mu, sigma = self.gp.predict(self.X_s)
+        mu, cov = self.gp.predict(self.X_s)
+        z = np.zeros(cov.shape[0])
         if self.minimize:
-            opt = np.min(self.gp.Y)
+            mu_ = np.min(self.gp.Y)
+            ip = mu_ - mu - self.xsi
         else:
-            opt = np.max(self.gp.Y)
-        sig = opt - mu - self.xsi
-        EI = sig * norm.cdf(sig / sigma) + sigma * norm.pdf(sig / sigma)
-        return self.X_s[np.argmax(EI)], EI
+            mu_s_opt = np.max(self.gp.Y)
+            ip = mu - mu_s_opt - self.xsi
+        for i in range(cov.shape[0]):
+            if cov[i] > 0:
+                z[i] = ip[i] / cov[i]
+            else:
+                z[i] = 0
+            EI = ip * norm.cdf(z) + cov * norm.pdf(z)
+        X_next = self.X_s[np.argmax(EI)]
+        return X_next, EI
 
     def optimize(self, iterations=100):
         """ iterations: the maximum number of iterations to perform """
