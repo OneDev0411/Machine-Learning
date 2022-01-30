@@ -56,7 +56,7 @@ class BayesianOptimization:
                 z[i] = 0
             EI = ip * norm.cdf(z) + cov * norm.pdf(z)
         X_next = self.X_s[np.argmax(EI)]
-        return X_next, 
+        return X_next, EI
 
     def optimize(self, iterations=100):
         """ iterations: the maximum number of iterations to perform """
