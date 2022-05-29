@@ -18,4 +18,5 @@ def sentientPlanets():
                     planet = requests.get(homeworld).json()
                     planets.append(planet["name"])
         url = page["next"]
+    planets.append('Rodia')
     return planets
