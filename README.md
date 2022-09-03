@@ -1,4 +1,4 @@
-# Holbertonschool Machine Learning
+# Machine Learning
 
 # This repository includes all the machine learning projects that were finished.
 
